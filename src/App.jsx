@@ -1,638 +1,307 @@
 import { useEffect, useMemo, useState } from 'react'
-import * as XLSX from 'xlsx'
+import { OUTPUT_COLUMNS, REVIEW_COLUMNS, TITLE_PARTS, UNSOURCED_COLUMNS } from './lib/columns.js'
+import { loadSavedMapping, resolveMapping, saveMapping } from './lib/mapping.js'
+import { hasEiValues, mergeById, swapEipEis, UNMATCHED } from './lib/merge.js'
+import { headerKey, parseIdList } from './lib/text.js'
+import { buildExtractFile, downloadFile, readWorkbook } from './lib/workbook.js'
+import DataTable, { Pager, usePaging } from './DataTable.jsx'
 
-const OUTPUT_SHEET_NAME = 'PLUS2B Extract'
-const OUTPUT_COLUMNS = [
-  'ID',
-  'Iteration Path',
-  'Work Item Type',
-  'Regime',
-  'Tags',
-  'Title',
-  'Description',
-  'Acceptance Criteria',
-  'Remarks',
-  'State',
-  'Assigned To',
-  'Target By',
-  'Assigned On',
-  'Ready On',
-  'Tested for Demo',
-  'Done on',
-  'Suggested Story Points',
-  'Temp Story Points',
-  'AP_N_Sim',
-  'AP_N_Med',
-  'AP_N_Com',
-  'AP_C_Sim',
-  'AP_C_Med',
-  'AP_C_Com',
-  'BP_N_Sim',
-  'BP_N_Med',
-  'BP_N_Com',
-  'BP_C_Sim',
-  'BP_C_Med',
-  'BP_C_Com',
-]
-const TEXT_CLEAN_COLUMNS = new Set(['Description', 'Acceptance Criteria'])
-const LOCAL_STORAGE_KEY = 'exeasier:last-mappings:v1'
-const PREVIEW_PAGE_SIZE = 20
-
-const normalizeHeader = (header) => String(header ?? '').trim()
-const normalizeText = (value) => String(value ?? '').replace(/\s+/g, ' ').trim()
-
-function cleanupHtmlText(value) {
-  const raw = String(value ?? '')
-  if (!raw) return ''
-  return raw
-    .replace(/<\s*br\s*\/?\s*>/gi, '\n')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/\r\n/g, '\n')
-    .replace(/\s*\n\s*/g, '\n')
-    .replace(/[ \t]{2,}/g, ' ')
-    .trim()
+// Pick the sheet that looks like "IDs & Tags": has ID + Title 1 headers, else a matching name, else the first.
+function guessSourceKey(files) {
+  const all = files.flatMap((file) => file.sheets.map((sheet) => ({ file, sheet })))
+  const keys = (sheet) => sheet.headers.map(headerKey)
+  const byHeaders = all.find(({ sheet }) => keys(sheet).includes('id') && keys(sheet).includes('title1'))
+  const byName = all.find(({ sheet }) => headerKey(sheet.name).includes('tags'))
+  const pick = byHeaders ?? byName ?? all[0]
+  return pick ? sheetKey(pick.file, pick.sheet) : ''
 }
 
-function isBlank(value) {
-  return normalizeText(value) === ''
-}
+const sheetKey = (file, sheet) => `${file.fileName}\u0000${sheet.name}`
 
-function completenessScore(value) {
-  return normalizeText(value).length
-}
+function MappingEditor({ headers, mapping, onChange, onReset }) {
+  const titleParts = TITLE_PARTS.filter((part) => headers.includes(part))
+  const options = [
+    { label: '(blank)', value: [] },
+    ...(titleParts.length > 1 ? [{ label: `${titleParts.join(' + ')} (joined)`, value: titleParts }] : []),
+    ...headers.map((header) => ({ label: header, value: [header] })),
+  ]
+  const mapped = OUTPUT_COLUMNS.filter((column) => mapping[column].length > 0).length
 
-function pickMoreComplete(currentValue, candidateValue) {
-  if (isBlank(candidateValue)) return currentValue
-  if (isBlank(currentValue)) return candidateValue
-  return completenessScore(candidateValue) > completenessScore(currentValue)
-    ? candidateValue
-    : currentValue
-}
-
-function parseSheet(sheet) {
-  const matrix = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' })
-  const rawHeaders = matrix[0] ?? []
-
-  const keepIndexes = []
-  const headers = []
-
-  rawHeaders.forEach((header, index) => {
-    const normalized = normalizeHeader(header)
-    if (!normalized) return
-    keepIndexes.push(index)
-    headers.push(normalized)
-  })
-
-  const rows = matrix
-    .slice(1)
-    .map((row) => {
-      const result = {}
-      keepIndexes.forEach((index, targetIndex) => {
-        result[headers[targetIndex]] = row[index] ?? ''
-      })
-      return result
-    })
-    .filter((row) => headers.some((header) => !isBlank(row[header])))
-
-  return { headers, rows }
-}
-
-function findCaseInsensitiveMatch(headers, value) {
-  const normalized = value.toLowerCase()
-  return headers.find((header) => header.toLowerCase() === normalized) ?? ''
-}
-
-function createDefaultMapping(headers, persistedMapping) {
-  return Object.fromEntries(
-    OUTPUT_COLUMNS.map((targetColumn) => {
-      const persisted = persistedMapping?.[targetColumn]
-      if (persisted && headers.includes(persisted)) return [targetColumn, persisted]
-      return [targetColumn, findCaseInsensitiveMatch(headers, targetColumn)]
-    }),
+  return (
+    <details>
+      <summary>
+        Column mapping — {mapped} of {OUTPUT_COLUMNS.length} target columns have a source
+      </summary>
+      <button type="button" className="link" onClick={onReset}>
+        Reset to auto-mapping
+      </button>
+      <div className="mapping-grid">
+        {OUTPUT_COLUMNS.map((column) => {
+          const current = JSON.stringify(mapping[column])
+          const known = options.some((option) => JSON.stringify(option.value) === current)
+          return (
+            <label key={column} className={REVIEW_COLUMNS.has(column) ? 'review' : ''}>
+              <span>
+                {column}
+                {REVIEW_COLUMNS.has(column) && <em className="badge warn">needs review</em>}
+                {UNSOURCED_COLUMNS.has(column) && <em className="badge">no source</em>}
+              </span>
+              <select value={current} onChange={(event) => onChange(column, JSON.parse(event.target.value))}>
+                {!known && <option value={current}>{mapping[column].join(' + ')}</option>}
+                {options.map((option) => (
+                  <option key={option.label} value={JSON.stringify(option.value)}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )
+        })}
+      </div>
+    </details>
   )
 }
 
-function createDefaultIdColumn(headers, persistedIdColumn) {
-  if (persistedIdColumn && headers.includes(persistedIdColumn)) return persistedIdColumn
-  return findCaseInsensitiveMatch(headers, 'ID') || headers[0] || ''
+const FILTERS = {
+  all: () => true,
+  unmatched: (row) => row[UNMATCHED],
+  ei: (row) => hasEiValues(row),
 }
 
-function loadPersistedMappings() {
-  try {
-    const value = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (!value) return { byFile: {} }
-    const parsed = JSON.parse(value)
-    return parsed?.byFile ? parsed : { byFile: {} }
-  } catch {
-    return { byFile: {} }
-  }
-}
-
-function savePersistedMappings(sources) {
-  const byFile = Object.fromEntries(
-    sources.map((source) => [
-      source.fileName,
-      {
-        idColumn: source.idColumn,
-        mapping: source.mapping,
-      },
-    ]),
-  )
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ byFile }))
-}
-
-function buildIdMap(rows, idColumn) {
-  const map = new Map()
-  rows.forEach((row) => {
-    const id = normalizeText(row[idColumn])
-    if (!id) return
-    map.set(id, row)
-  })
-  return map
-}
-
-function getSheet(source) {
-  return source.sheets.find((sheet) => sheet.name === source.selectedSheet)
-}
-
-function makeSourceLabel(source) {
-  return `${source.fileName} (${source.selectedSheet})`
-}
-
-function App() {
-  const [sources, setSources] = useState([])
-  const [isDragging, setIsDragging] = useState(false)
-  const [previewPageBySource, setPreviewPageBySource] = useState({})
-  const [baseSourceId, setBaseSourceId] = useState('')
-  const [resultRows, setResultRows] = useState([])
-  const [resultPage, setResultPage] = useState(1)
-  const [unmatchedIds, setUnmatchedIds] = useState([])
+export default function App() {
+  const [files, setFiles] = useState([])
+  const [sourceKey, setSourceKey] = useState('')
+  const [overrides, setOverrides] = useState(() => loadSavedMapping() ?? {})
+  const [idsText, setIdsText] = useState('')
+  const [result, setResult] = useState(null)
+  const [filter, setFilter] = useState('all')
+  const [skipUnmatched, setSkipUnmatched] = useState(true)
+  const [dragging, setDragging] = useState(false)
   const [error, setError] = useState('')
 
-  const availableSources = useMemo(() => sources.filter((source) => source.selectedSheet), [sources])
-
-  useEffect(() => {
-    if (!baseSourceId && availableSources[0]) {
-      setBaseSourceId(availableSources[0].id)
+  const source = useMemo(() => {
+    for (const file of files) {
+      for (const sheet of file.sheets) if (sheetKey(file, sheet) === sourceKey) return sheet
     }
-  }, [availableSources, baseSourceId])
+    return null
+  }, [files, sourceKey])
 
-  useEffect(() => {
-    if (sources.length > 0) {
-      savePersistedMappings(sources)
-    }
-  }, [sources])
+  const mapping = useMemo(() => resolveMapping(source?.headers ?? [], overrides), [source, overrides])
 
-  const parseFiles = async (files) => {
+  useEffect(() => saveMapping(overrides), [overrides])
+
+  const addFiles = async (fileList) => {
     setError('')
-    const persisted = loadPersistedMappings()
-
-    const parsedSources = await Promise.all(
-      files
-        .filter((file) => /\.xlsx$/i.test(file.name))
-        .map(async (file, index) => {
-          const data = await file.arrayBuffer()
-          const workbook = XLSX.read(data, { type: 'array' })
-          const sheets = workbook.SheetNames.map((sheetName) => {
-            const parsed = parseSheet(workbook.Sheets[sheetName])
-            return {
-              name: sheetName,
-              headers: parsed.headers,
-              rows: parsed.rows,
-            }
-          })
-
-          const selectedSheet = sheets[0]?.name ?? ''
-          const selectedSheetData = sheets[0] ?? { headers: [] }
-          const persistedForFile = persisted.byFile[file.name] ?? {}
-          const idColumn = createDefaultIdColumn(selectedSheetData.headers, persistedForFile.idColumn)
-          const mapping = createDefaultMapping(selectedSheetData.headers, persistedForFile.mapping)
-
-          return {
-            id: `${Date.now()}-${index}-${file.name}`,
-            fileName: file.name,
-            sheets,
-            selectedSheet,
-            idColumn,
-            mapping,
-          }
-        }),
-    )
-
-    if (parsedSources.length === 0) {
-      setError('Please upload one or more .xlsx files.')
+    const picked = [...fileList].filter((file) => /\.xlsx$/i.test(file.name))
+    if (picked.length === 0) {
+      setError('Please choose .xlsx files.')
       return
     }
-
-    setSources(parsedSources)
-    setPreviewPageBySource({})
-    setResultRows([])
-    setUnmatchedIds([])
-    setResultPage(1)
-    setBaseSourceId(parsedSources[0]?.id ?? '')
+    try {
+      const parsed = await Promise.all(
+        picked.map(async (file) => ({ fileName: file.name, sheets: readWorkbook(await file.arrayBuffer()) })),
+      )
+      const names = new Set(parsed.map((file) => file.fileName))
+      const next = [...files.filter((file) => !names.has(file.fileName)), ...parsed]
+      setFiles(next)
+      setSourceKey(guessSourceKey(next))
+      setResult(null)
+    } catch (err) {
+      setError(`Could not read file: ${err.message}`)
+    }
   }
 
-  const handleInputFiles = async (event) => {
-    const files = Array.from(event.target.files ?? [])
-    await parseFiles(files)
-  }
-
-  const handleDrop = async (event) => {
-    event.preventDefault()
-    setIsDragging(false)
-    const files = Array.from(event.dataTransfer.files ?? [])
-    await parseFiles(files)
-  }
-
-  const updateSource = (sourceId, updater) => {
-    setSources((current) => current.map((source) => (source.id === sourceId ? updater(source) : source)))
-  }
-
-  const updateSelectedSheet = (sourceId, selectedSheet) => {
-    updateSource(sourceId, (source) => {
-      const sheet = source.sheets.find((entry) => entry.name === selectedSheet) ?? { headers: [] }
-      return {
-        ...source,
-        selectedSheet,
-        idColumn: createDefaultIdColumn(sheet.headers, source.idColumn),
-        mapping: createDefaultMapping(sheet.headers, source.mapping),
-      }
-    })
-    setPreviewPageBySource((current) => ({ ...current, [sourceId]: 1 }))
-  }
+  const changeMapping = (column, value) => setOverrides((current) => ({ ...current, [column]: value }))
 
   const runMerge = () => {
-    const selectedSources = sources.filter((source) => getSheet(source)?.rows.length > 0)
-    const baseSource = selectedSources.find((source) => source.id === baseSourceId) ?? selectedSources[0]
-
-    if (!baseSource) {
-      setError('Upload files and select populated sheets before merging.')
-      return
-    }
-
-    const sourceContexts = selectedSources.map((source) => {
-      const sheet = getSheet(source)
-      return {
-        source,
-        label: makeSourceLabel(source),
-        rows: sheet.rows,
-        idMap: buildIdMap(sheet.rows, source.idColumn),
-      }
-    })
-
-    const baseContext = sourceContexts.find((ctx) => ctx.source.id === baseSource.id)
-    const baseIds = baseContext.rows
-      .map((row) => normalizeText(row[baseSource.idColumn]))
-      .filter((id) => Boolean(id))
-
-    const merged = baseIds.map((id) => {
-      const outputRow = Object.fromEntries(OUTPUT_COLUMNS.map((column) => [column, '']))
-      outputRow.ID = id
-
-      OUTPUT_COLUMNS.forEach((targetColumn) => {
-        let bestValue = outputRow[targetColumn]
-
-        sourceContexts.forEach(({ source, idMap }) => {
-          const row = idMap.get(id)
-          if (!row) return
-          const mappedColumn = source.mapping[targetColumn]
-          if (!mappedColumn) return
-
-          const rawValue = row[mappedColumn]
-          const value = TEXT_CLEAN_COLUMNS.has(targetColumn) ? cleanupHtmlText(rawValue) : rawValue
-          bestValue = pickMoreComplete(bestValue, value)
-        })
-
-        outputRow[targetColumn] = TEXT_CLEAN_COLUMNS.has(targetColumn)
-          ? cleanupHtmlText(bestValue)
-          : normalizeText(bestValue)
-      })
-
-      return outputRow
-    })
-
-    const allIds = new Set()
-    const idPresence = new Map()
-
-    sourceContexts.forEach(({ label, idMap }) => {
-      idMap.forEach((_, id) => {
-        allIds.add(id)
-        if (!idPresence.has(id)) {
-          idPresence.set(id, new Set())
-        }
-        idPresence.get(id).add(label)
-      })
-    })
-
-    const allLabels = sourceContexts.map((ctx) => ctx.label)
-    const unmatched = Array.from(allIds)
-      .map((id) => {
-        const present = Array.from(idPresence.get(id) ?? [])
-        const missing = allLabels.filter((label) => !present.includes(label))
-        return {
-          id,
-          present,
-          missing,
-        }
-      })
-      .filter((entry) => entry.missing.length > 0)
-      .sort((a, b) => a.id.localeCompare(b.id))
-
-    setResultRows(merged)
-    setUnmatchedIds(unmatched)
-    setResultPage(1)
     setError('')
-  }
-
-  const exportResult = () => {
-    if (resultRows.length === 0) return
-
-    const aoa = [OUTPUT_COLUMNS, ...resultRows.map((row) => OUTPUT_COLUMNS.map((column) => row[column] ?? ''))]
-    const worksheet = XLSX.utils.aoa_to_sheet(aoa)
-
-    const range = XLSX.utils.decode_range(worksheet['!ref'])
-    for (let row = range.s.r; row <= range.e.r; row += 1) {
-      for (let col = range.s.c; col <= range.e.c; col += 1) {
-        const address = XLSX.utils.encode_cell({ r: row, c: col })
-        if (!worksheet[address]) continue
-
-        worksheet[address].s = {
-          ...worksheet[address].s,
-          alignment: {
-            ...worksheet[address].s?.alignment,
-            wrapText: true,
-            vertical: 'top',
-          },
-          font: row === 0
-            ? {
-                ...worksheet[address].s?.font,
-                bold: true,
-              }
-            : worksheet[address].s?.font,
-        }
-      }
+    try {
+      const ids = parseIdList(idsText)
+      setResult(mergeById(source.rows, mapping, { ids: ids.length > 0 ? ids : undefined }))
+      setFilter('all')
+    } catch (err) {
+      setError(err.message)
     }
-
-    worksheet['!cols'] = OUTPUT_COLUMNS.map(() => ({ wch: 24 }))
-
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, OUTPUT_SHEET_NAME)
-    XLSX.writeFile(workbook, 'plus2b_extract.xlsx', { cellStyles: true })
   }
 
-  const updateResultCell = (rowIndex, column, value) => {
-    setResultRows((current) =>
-      current.map((row, index) =>
-        index === rowIndex
-          ? {
-              ...row,
-              [column]: value,
-            }
-          : row,
-      ),
-    )
+  const updateRow = (index, update) =>
+    setResult((current) => ({
+      ...current,
+      rows: current.rows.map((row, i) => (i === index ? update(row) : row)),
+    }))
+
+  const exportFile = () => {
+    const rows = result.rows.filter((row) => !(skipUnmatched && row[UNMATCHED]))
+    const date = new Date().toISOString().slice(0, 10)
+    downloadFile(buildExtractFile(rows), `PLUS2B_Extract_${date}.xlsx`)
   }
+
+  const visible = result
+    ? result.rows.map((row, index) => ({ row, index })).filter(({ row }) => FILTERS[filter](row))
+    : []
+  const resultPaging = usePaging(visible.length, `${filter}:${result?.rows.length}`)
+  const eiCount = result ? result.rows.filter(hasEiValues).length : 0
 
   return (
     <main className="app-shell">
-      <h1>ExEasier - PLUS2B Merge Tool</h1>
-      <p className="helper-text">Upload .xlsx files, map columns, merge by ID, then export.</p>
+      <h1>PLUS2B Extract builder</h1>
 
       <section className="panel">
-        <h2>1) Upload Excel files</h2>
-        <div
-          className={`drop-zone ${isDragging ? 'dragging' : ''}`}
+        <h2>1. Upload workbooks</h2>
+        <label
+          className={`drop-zone ${dragging ? 'dragging' : ''}`}
           onDragOver={(event) => {
             event.preventDefault()
-            setIsDragging(true)
+            setDragging(true)
           }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(event) => {
+            event.preventDefault()
+            setDragging(false)
+            addFiles(event.dataTransfer.files)
+          }}
         >
-          <p>Drag and drop .xlsx files here</p>
-          <p>or</p>
-          <input type="file" multiple accept=".xlsx" onChange={handleInputFiles} />
-        </div>
-        {error && <p className="error-message">{error}</p>}
+          Drop .xlsx files here, or click to choose
+          <input
+            type="file"
+            accept=".xlsx"
+            multiple
+            hidden
+            data-testid="file-input"
+            onChange={(event) => {
+              addFiles(event.target.files)
+              event.target.value = ''
+            }}
+          />
+        </label>
+        {files.length > 0 && <p className="muted">Loaded: {files.map((file) => file.fileName).join(', ')}</p>}
+        {error && <p className="error">{error}</p>}
       </section>
 
-      {sources.length > 0 && (
+      {files.length > 0 && (
         <section className="panel">
-          <h2>2) Sheet selection & source previews</h2>
-          {sources.map((source) => {
-            const sheet = getSheet(source)
-            const page = previewPageBySource[source.id] ?? 1
-            const totalPages = Math.max(1, Math.ceil((sheet?.rows.length ?? 0) / PREVIEW_PAGE_SIZE))
-            const rows = (sheet?.rows ?? []).slice((page - 1) * PREVIEW_PAGE_SIZE, page * PREVIEW_PAGE_SIZE)
-
-            return (
-              <article key={source.id} className="sub-panel">
-                <h3>{source.fileName}</h3>
-                <div className="form-row">
-                  <label>
-                    Sheet
-                    <select value={source.selectedSheet} onChange={(event) => updateSelectedSheet(source.id, event.target.value)}>
-                      {source.sheets.map((entry) => (
-                        <option key={entry.name} value={entry.name}>
-                          {entry.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    ID column
-                    <select
-                      value={source.idColumn}
-                      onChange={(event) =>
-                        updateSource(source.id, (current) => ({
-                          ...current,
-                          idColumn: event.target.value,
-                        }))
-                      }
-                    >
-                      {(sheet?.headers ?? []).map((header) => (
-                        <option key={header} value={header}>
-                          {header}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <details>
-                  <summary>Column mapping ({OUTPUT_COLUMNS.length} target columns)</summary>
-                  <div className="mapping-grid">
-                    {OUTPUT_COLUMNS.map((targetColumn) => (
-                      <label key={`${source.id}-${targetColumn}`}>
-                        {targetColumn}
-                        <select
-                          value={source.mapping[targetColumn] ?? ''}
-                          onChange={(event) =>
-                            updateSource(source.id, (current) => ({
-                              ...current,
-                              mapping: {
-                                ...current.mapping,
-                                [targetColumn]: event.target.value,
-                              },
-                            }))
-                          }
-                        >
-                          <option value="">(unmapped)</option>
-                          {(sheet?.headers ?? []).map((header) => (
-                            <option key={header} value={header}>
-                              {header}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    ))}
-                  </div>
-                </details>
-
-                <div className="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        {(sheet?.headers ?? []).map((header) => (
-                          <th key={header}>{header}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.map((row, rowIndex) => (
-                        <tr key={`${source.id}-${rowIndex}`}>
-                          {(sheet?.headers ?? []).map((header) => (
-                            <td key={`${source.id}-${rowIndex}-${header}`}>{String(row[header] ?? '')}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="pager">
-                  <button type="button" onClick={() => setPreviewPageBySource((cur) => ({ ...cur, [source.id]: Math.max(1, page - 1) }))}>
-                    Prev
-                  </button>
-                  <span>
-                    Page {page} / {totalPages}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setPreviewPageBySource((cur) => ({ ...cur, [source.id]: Math.min(totalPages, page + 1) }))}
-                  >
-                    Next
-                  </button>
-                </div>
-              </article>
-            )
-          })}
-        </section>
-      )}
-
-      {sources.length > 0 && (
-        <section className="panel">
-          <h2>3) Merge</h2>
-          <label>
-            Base source (left side)
-            <select value={baseSourceId} onChange={(event) => setBaseSourceId(event.target.value)}>
-              {availableSources.map((source) => (
-                <option key={source.id} value={source.id}>
-                  {makeSourceLabel(source)}
-                </option>
+          <h2>2. Choose the “IDs &amp; Tags” sheet</h2>
+          <label className="field">
+            Source sheet
+            <select value={sourceKey} onChange={(event) => setSourceKey(event.target.value)}>
+              {files.map((file) => (
+                <optgroup key={file.fileName} label={file.fileName}>
+                  {file.sheets.map((sheet) => (
+                    <option key={sheet.name} value={sheetKey(file, sheet)}>
+                      {sheet.name} ({sheet.rows.length} rows)
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>
-          <div className="button-row">
-            <button type="button" onClick={runMerge}>
-              Merge by ID
-            </button>
-            <button type="button" onClick={exportResult} disabled={resultRows.length === 0}>
-              Export PLUS2B Extract (.xlsx)
-            </button>
-          </div>
+          {source && (
+            <>
+              <SourcePreview key={sourceKey} sheet={source} />
+              <MappingEditor
+                headers={source.headers}
+                mapping={mapping}
+                onChange={changeMapping}
+                onReset={() => setOverrides({})}
+              />
+            </>
+          )}
         </section>
       )}
 
-      {unmatchedIds.length > 0 && (
+      {source && (
         <section className="panel">
-          <h2>Unmatched IDs</h2>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Present In</th>
-                  <th>Missing In</th>
-                </tr>
-              </thead>
-              <tbody>
-                {unmatchedIds.map((entry) => (
-                  <tr key={entry.id}>
-                    <td>{entry.id}</td>
-                    <td>{entry.present.join(', ')}</td>
-                    <td>{entry.missing.join(', ')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <h2>3. Merge on ID</h2>
+          <label className="field">
+            Sprint IDs (optional — paste one per line or comma-separated; leave empty to use every row)
+            <textarea rows={4} value={idsText} onChange={(event) => setIdsText(event.target.value)} />
+          </label>
+          <button type="button" onClick={runMerge}>
+            Merge
+          </button>
         </section>
       )}
 
-      {resultRows.length > 0 && (
+      {result && (
         <section className="panel">
-          <h2>4) Result preview (editable)</h2>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  {OUTPUT_COLUMNS.map((column) => (
-                    <th key={column}>{column}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {resultRows
-                  .slice((resultPage - 1) * PREVIEW_PAGE_SIZE, resultPage * PREVIEW_PAGE_SIZE)
-                  .map((row, pageIndex) => {
-                    const rowIndex = (resultPage - 1) * PREVIEW_PAGE_SIZE + pageIndex
-                    return (
-                      <tr key={`result-${row.ID}-${rowIndex}`}>
-                        {OUTPUT_COLUMNS.map((column) => (
-                          <td key={`result-${rowIndex}-${column}`}>
-                            <input
-                              value={row[column] ?? ''}
-                              onChange={(event) => updateResultCell(rowIndex, column, event.target.value)}
-                            />
-                          </td>
-                        ))}
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </table>
+          <h2>4. Review &amp; export</h2>
+          <p>
+            {result.rows.length} rows.{' '}
+            {result.unmatchedIds.length > 0 && (
+              <span className="error">
+                {result.unmatchedIds.length} ID(s) not found in the source: {result.unmatchedIds.join(', ')}.{' '}
+              </span>
+            )}
+            {result.duplicateIds.length > 0 && (
+              <span className="warn-text">
+                Duplicate IDs in source (first row used): {result.duplicateIds.join(', ')}.{' '}
+              </span>
+            )}
+            {eiCount > 0 && (
+              <span className="warn-text">
+                {eiCount} row(s) have EI values, placed in EIP_* by default — check whether they belong in EIS_*.
+              </span>
+            )}
+          </p>
+          <div className="toolbar">
+            <label>
+              Show{' '}
+              <select value={filter} onChange={(event) => setFilter(event.target.value)}>
+                <option value="all">all rows</option>
+                <option value="unmatched">unmatched IDs only</option>
+                <option value="ei">rows needing EIP/EIS review</option>
+              </select>
+            </label>
+            <label>
+              <input type="checkbox" checked={skipUnmatched} onChange={(event) => setSkipUnmatched(event.target.checked)} />{' '}
+              Leave unmatched IDs out of the export
+            </label>
+            <button type="button" onClick={exportFile}>
+              Export .xlsx
+            </button>
           </div>
 
-          <div className="pager">
-            <button type="button" onClick={() => setResultPage((current) => Math.max(1, current - 1))}>
-              Prev
-            </button>
-            <span>
-              Page {resultPage} / {Math.max(1, Math.ceil(resultRows.length / PREVIEW_PAGE_SIZE))}
-            </span>
-            <button
-              type="button"
-              onClick={() => setResultPage((current) => Math.min(Math.max(1, Math.ceil(resultRows.length / PREVIEW_PAGE_SIZE)), current + 1))}
-            >
-              Next
-            </button>
-          </div>
+          <DataTable
+            columns={OUTPUT_COLUMNS}
+            rows={visible.slice(resultPaging.start, resultPaging.end)}
+            headerClass={(column) => (REVIEW_COLUMNS.has(column) ? 'review' : UNSOURCED_COLUMNS.has(column) ? 'unsourced' : '')}
+            rowClass={({ row }) => (row[UNMATCHED] ? 'unmatched' : '')}
+            leading={({ row, index }) => (
+              <>
+                {row[UNMATCHED] && <em className="badge error">no match</em>}
+                {hasEiValues(row) && (
+                  <button type="button" className="small" onClick={() => updateRow(index, swapEipEis)} title="Swap this row’s EIP_* and EIS_* values">
+                    EIP ⇄ EIS
+                  </button>
+                )}
+              </>
+            )}
+            cell={({ row, index }, column) => (
+              <input
+                aria-label={`${column} for ${row.ID}`}
+                value={row[column] ?? ''}
+                title={String(row[column] ?? '')}
+                onChange={(event) => updateRow(index, (current) => ({ ...current, [column]: event.target.value }))}
+              />
+            )}
+          />
+          <Pager paging={resultPaging} />
         </section>
       )}
     </main>
   )
 }
 
-export default App
+function SourcePreview({ sheet }) {
+  const paging = usePaging(sheet.rows.length)
+  return (
+    <>
+      <DataTable
+        columns={sheet.headers}
+        rows={sheet.rows.slice(paging.start, paging.end)}
+        cell={(row, column) => String(row[column] ?? '')}
+      />
+      <Pager paging={paging} />
+    </>
+  )
+}
