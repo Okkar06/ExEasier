@@ -186,7 +186,9 @@ export function buildSheetFile(sheetName, columns, rows, types = {}) {
     for (let c = range.s.c; c <= range.e.c; c += 1) {
       const address = XLSXStyle.utils.encode_cell({ r, c })
       sheet[address] ??= { t: 's', v: '' }
-      sheet[address].s = r === 0 ? HEADER_STYLE : BODY_STYLE
+      // A fresh style per cell: xlsx-js-style writes a date cell's number format into its
+      // style object, so a shared object turned every later number (e.g. IDs) into a date.
+      sheet[address].s = structuredClone(r === 0 ? HEADER_STYLE : BODY_STYLE)
     }
   }
   sheet['!cols'] = columns.map((_, c) => {

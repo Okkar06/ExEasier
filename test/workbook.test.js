@@ -196,3 +196,17 @@ describe('real-workbook layouts', () => {
     expect(parsed.rows).toEqual([{ ID: 1, Title: 'a' }, { ID: 2, Title: 'b' }])
   })
 })
+
+describe('export number formats', () => {
+  it('keeps IDs as plain numbers after a date cell (no "1975-05-13" IDs)', () => {
+    const rows = [
+      { ID: 27000, Title: 'a', 'Target By': '' },
+      { ID: 27526, Title: 'b', 'Target By': new Date(2026, 8, 14) },
+      { ID: 27527, Title: 'c', 'Target By': '' },
+    ]
+    const ws = XLSX.read(buildSheetFile('PLUS2B Extract', ['ID', 'Title', 'Target By'], rows), { type: 'array', cellNF: true, cellText: true }).Sheets['PLUS2B Extract']
+    expect([ws.A2.w, ws.A3.w, ws.A4.w]).toEqual(['27000', '27526', '27527'])
+    expect(ws.A4.z).toBe('General')
+    expect(ws.C3.w).toBe('2026-09-14') // real dates still show as dates
+  })
+})
