@@ -61,3 +61,13 @@ export function headerKey(header) {
     .toLowerCase()
     .replace(/[\s_-]+/g, '')
 }
+
+/** Format a Date as YYYY-MM-DD in local time (toISOString would shift it by the UTC offset). */
+export function formatDate(date) {
+  if (Number.isNaN(date.getTime())) return 'invalid date'
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}
+
+/** A cell value as text for display/editing. */
+export const displayValue = (value) => (value instanceof Date ? formatDate(value) : value === null || value === undefined ? '' : String(value))

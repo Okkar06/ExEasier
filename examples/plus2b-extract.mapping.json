@@ -1,0 +1,2886 @@
+{
+  "version": 1,
+  "namedLists": {},
+  "lastOutput": "PLUS2B Extract",
+  "outputs": {
+    "PLUS2B Extract": {
+      "sourceSheets": [
+        "IDs & Tags"
+      ],
+      "keyColumn": "ID",
+      "rowSource": {
+        "kind": "sheet",
+        "sheet": "IDs & Tags",
+        "keyColumn": "ID"
+      },
+      "columns": [
+        {
+          "name": "ID",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "mandatory",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Iteration Path",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Iteration Path"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Work Item Type",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Work Item Type"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Regime",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Regime"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Tags",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Tags"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Title",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Title 1",
+              "Title 2",
+              "Title 3",
+              "Title 4",
+              "Title 5"
+            ]
+          },
+          "transforms": [
+            {
+              "type": "trim",
+              "collapse": true
+            },
+            {
+              "type": "join",
+              "separator": " ",
+              "skipBlanks": true
+            }
+          ],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Description",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Description"
+            ]
+          },
+          "transforms": [
+            {
+              "type": "stripHtml"
+            }
+          ],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Acceptance Criteria",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Acceptance Criteria"
+            ]
+          },
+          "transforms": [
+            {
+              "type": "stripHtml"
+            }
+          ],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Remarks",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Remarks"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "State",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "State"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Assigned To",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Target By",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Assigned On",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Ready On",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Tested for Demo",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Done on",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Suggested Story Points",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "Suggested Story Points"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Temp Story Points",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AP_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AP_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "BP_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "BP_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AL_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AL_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "R_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "R_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "ETL_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "ETL_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WS_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WS_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CE_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CE_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "CUI_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "CUI_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "AR_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "AR_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "TD_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "TD_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "EIP_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIP_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIP_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIP_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIP_C_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIP_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "EI_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: EI_* values land here by default; move them to EIS_* if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_N_Sim",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_N_Med",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_N_Com",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_C_Sim",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_C_Med",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "EIS_C_Com",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": "Needs review: the source only has EI_* (mapped to EIP_*). Move values here if the item is EIS."
+          }
+        },
+        {
+          "name": "WF_N_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_N_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WF_N_Med",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_N_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WF_N_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_N_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WF_C_Sim",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_C_Sim"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WF_C_Med_v2",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_C_Med"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "WF_C_Com",
+          "source": {
+            "kind": "columns",
+            "sheet": "IDs & Tags",
+            "keyColumn": "ID",
+            "joinOn": "",
+            "parts": [
+              "WF_C_Com"
+            ]
+          },
+          "transforms": [],
+          "editable": false,
+          "validation": {
+            "type": "number",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Parent",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "Base or New Scope",
+          "source": {
+            "kind": "none"
+          },
+          "transforms": [],
+          "editable": true,
+          "validation": {
+            "type": "",
+            "maxLength": null,
+            "requirement": {
+              "kind": "optional",
+              "column": "",
+              "operator": "equals",
+              "value": ""
+            },
+            "allowed": {
+              "kind": "none",
+              "values": [],
+              "name": ""
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  }
+}
