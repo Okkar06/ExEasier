@@ -1,4 +1,4 @@
-# Field Mapper
+# MergeSync
 
 An offline tool for building a fixed-format output sheet (e.g. **PLUS2B Extract**)
 from other sheets in your workbooks, driven by mapping rules you configure per
@@ -9,10 +9,10 @@ passwords and configs never leave your computer.
 
 ```bash
 npm install
-npm run build        # → dist/FieldMapper.html
+npm run build        # → dist/MergeSync.html
 ```
 
-`dist/FieldMapper.html` is the whole app in one file. Copy it to your laptop and
+`dist/MergeSync.html` is the whole app in one file. Copy it to your laptop and
 double-click it to open in Chrome or Edge. It needs no internet connection and
 nothing installed.
 

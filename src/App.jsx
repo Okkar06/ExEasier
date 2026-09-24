@@ -355,7 +355,7 @@ export default function App() {
 
   return (
     <main className={`app-shell ${editingColumn ? 'with-panel' : ''}`}>
-      <h1>Field Mapper</h1>
+      <h1>MergeSync</h1>
       <p className="muted">Runs entirely in this browser — files and passwords never leave your computer.</p>
 
       <section className="panel">
