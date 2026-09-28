@@ -1,0 +1,12 @@
+{
+  // Copied from a JavaScript config: comments, single quotes, bare keys, trailing commas
+  project: 'MergeSync',
+  version: "1.0.0",
+  enabled: True,
+  retries: 3,
+  fallback: None,
+  debug: undefined,
+  paths: ['src', 'test',],
+  /* block comment */
+  owner: { name: 'Ana', "id": 7, },
+}

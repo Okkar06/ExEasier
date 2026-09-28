@@ -1,0 +1,9 @@
+{
+  "order": 1001,
+  "customer": { "name": "Ben", "vip": true },
+  "items": [
+    { "sku": "A-1", "qty": 2, "price": 19.90 }
+    { "sku": "B-7", "qty": 1, "price": 20.10 }
+  ],
+  "total": 59.90
+}
